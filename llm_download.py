@@ -18,6 +18,7 @@ This needs to be run before doing any fine-tuning of models.
 import click
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
+
 DEFAULT_MODEL = "HuggingFaceTB/SmolLM2-135M-Instruct"
 DEFAULT_DATASET = "yelp/yelp_review_full"
 
