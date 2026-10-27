@@ -1,0 +1,6 @@
+accelerate
+click
+datasets
+torch
+tqdm
+transformers
