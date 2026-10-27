@@ -30,7 +30,7 @@ from transformers import (
     get_scheduler,
 )
 
-DEFAULT_MODEL = "HuggingFaceTB/SmolLM2-135M-Instruct"
+DEFAULT_MODEL = "HuggingFaceTB/SmolLM2-135M"
 DEFAULT_DATASET = "yelp/yelp_review_full"
 
 
@@ -45,6 +45,7 @@ def prepare_dataset(
 
     print("Loading the data")
 
+    # load the dataset with the option of only taking a percentage subset of it
     dataset = load_dataset(
         dataset_path,
         split={
@@ -92,7 +93,7 @@ def prepare_dataset(
     return tokenized_datasets
 
 
-def prepare(model_path, dataset_path, device, subset=1, splits={"test": "test",
+def prepare(model_path, dataset_path, subset=1, splits={"test": "test",
 "train": "train"}):
     tokenizer = AutoTokenizer.from_pretrained(model_path)
 
@@ -111,7 +112,7 @@ def prepare(model_path, dataset_path, device, subset=1, splits={"test": "test",
         model_path,
         num_labels=num_labels,
         torch_dtype=torch.float32,
-    ).to(device)
+    )
 
     return model, train_dataloader, eval_dataloader
 
@@ -166,7 +167,7 @@ def main(model, dataset, subset, output_dir, num_epochs):
     accelerator = Accelerator()
     print(f"Device: {accelerator.device}")
 
-    model, train_loader, eval_loader = prepare(model, dataset, accelerator.device, subset=subset)
+    model, train_loader, eval_loader = prepare(model, dataset, subset=subset)
     print("Data loaded.")
     train(accelerator, model, train_loader, eval_loader, num_epochs)
 

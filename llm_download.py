@@ -19,7 +19,7 @@ import click
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
-DEFAULT_MODEL = "HuggingFaceTB/SmolLM2-135M-Instruct"
+DEFAULT_MODEL = "HuggingFaceTB/SmolLM2-135M"
 DEFAULT_DATASET = "yelp/yelp_review_full"
 
 
