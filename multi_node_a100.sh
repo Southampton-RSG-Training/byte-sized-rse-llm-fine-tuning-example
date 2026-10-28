@@ -5,7 +5,8 @@
 #SBATCH --time=01:00:00
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
-#SBATCH --gres=gpu:2
+#SBATCH --gpus-per-task=2
+#SBATCH --cpus-per-task=2
 #SBATCH --account=ecs
 #SBATCH --qos=ecsgpu
 
@@ -40,7 +41,7 @@ echo "Head node IP: $head_node_ip"
 cd $SLURM_SUBMIT_DIR
 
 # Run the Python script
-srun accelerate launch --num_processes 4 --num_machines 2 --rdzv_backend c10d --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py
+accelerate launch --num_processes 4 --num_machines 2 --rdzv_backend c10d --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
 
 # deactivate virtual environment
 deactivate
