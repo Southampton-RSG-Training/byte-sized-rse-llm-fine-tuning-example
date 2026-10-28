@@ -92,6 +92,8 @@ def get_trainer(model_path, dataset_path, training_args, subset):
     model = AutoModelForSequenceClassification.from_pretrained(
         model_path,
         num_labels=num_labels,
+        local_files_only=True,
+        dtype="auto",
     )
 
     print("Preparing the trainer")
@@ -112,7 +114,7 @@ def get_trainer(model_path, dataset_path, training_args, subset):
 @click.option("--model", default=DEFAULT_MODEL, help="path to the model")
 @click.option("--dataset", default=DEFAULT_DATASET, help="path to the dataset")
 @click.option("--output-dir", default="fine_tuned_classifier", help="path to the output location")
-@click.option("--num-epochs", default=10, help="the number of epochs")
+@click.option("--num-epochs", default=2, help="the number of epochs")
 @click.option("--subset", default=0.01, help="the proportion of the dataset to use")
 def main(model, dataset, subset, output_dir, num_epochs):
     print("Started")
