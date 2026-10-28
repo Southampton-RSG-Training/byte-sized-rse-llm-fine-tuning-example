@@ -129,6 +129,7 @@ def main(model, dataset, subset, output_dir, num_epochs):
         per_device_eval_batch_size=16,
         num_train_epochs=num_epochs,
         weight_decay=0.01,
+        bf16=False,  # Not supported on CUDA
     )
 
     trainer = get_trainer(model, dataset, training_args, subset=subset)
