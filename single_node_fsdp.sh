@@ -5,7 +5,7 @@
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --gpus-per-task=8
+#SBATCH --gpus-per-task=4
 #SBATCH --cpus-per-task=2
 
 WORKING_DIRECTORY=$SLURM_SUBMIT_DIR
@@ -38,7 +38,7 @@ echo "Head node IP: $head_node_ip"
 cd $SLURM_SUBMIT_DIR
 
 # Run the Python script
-accelerate launch --num_processes 8 --num_machines 1 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
+accelerate launch --multi-gpu --use-fsdp --num_processes 4 --num_machines 1 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
 
 # deactivate virtual environment
 deactivate

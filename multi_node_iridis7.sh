@@ -38,7 +38,7 @@ echo "Head node IP: $head_node_ip"
 cd $SLURM_SUBMIT_DIR
 
 # Run the Python script
-accelerate launch --num_processes 4 --num_machines 2 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
+accelerate launch --multi-gpu --num_processes 4 --num_machines 2 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
 
 # deactivate virtual environment
 deactivate
