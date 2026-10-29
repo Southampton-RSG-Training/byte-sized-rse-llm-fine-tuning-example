@@ -1,6 +1,8 @@
 accelerate
 click
 datasets
+protobuf
+sentencepiece
 torch
 tqdm
 transformers

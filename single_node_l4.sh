@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=multi-node-llm-example
+#SBATCH --job-name=single-node-llm-example
 #SBATCH --partition=l4
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
