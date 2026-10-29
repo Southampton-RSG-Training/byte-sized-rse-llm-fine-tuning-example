@@ -1,14 +1,12 @@
 #!/bin/bash
 
 #SBATCH --job-name=multi-node-llm-example
-#SBATCH --partition=a100
-#SBATCH --time=01:00:00
-#SBATCH --nodes=2
+#SBATCH --partition=l4
+#SBATCH --time=00:10:00
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --gpus-per-task=2
+#SBATCH --gpus-per-task=8
 #SBATCH --cpus-per-task=2
-#SBATCH --account=ecs
-#SBATCH --qos=ecsgpu
 
 WORKING_DIRECTORY=$SLURM_SUBMIT_DIR
 VENV_NAME=$WORKING_DIRECTORY/venv
@@ -20,7 +18,6 @@ LOG_DIR=$WORKING_DIRECTORY/logs
 echo "Running on host: $(hostname)"
 echo "Job started at: $(date)"
 echo "SLURM job ID: $SLURM_JOB_ID"
-echo "Number of GPUs: $SLURM_GPUS_PER_TASK"
 
 # Load required modules
 module purge
@@ -41,7 +38,7 @@ echo "Head node IP: $head_node_ip"
 cd $SLURM_SUBMIT_DIR
 
 # Run the Python script
-accelerate launch --num_processes 4 --num_machines 2 --rdzv_backend c10d --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
+accelerate launch --num_processes 8 --num_machines 1 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
 
 # deactivate virtual environment
 deactivate

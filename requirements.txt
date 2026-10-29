@@ -4,3 +4,4 @@ datasets
 torch
 tqdm
 transformers
+typing_extensions

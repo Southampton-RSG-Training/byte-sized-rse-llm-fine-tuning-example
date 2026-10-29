@@ -93,7 +93,7 @@ def get_trainer(model_path, dataset_path, training_args, subset):
         model_path,
         num_labels=num_labels,
         local_files_only=True,
-        dtype="auto",
+        dtype=torch.float32,  # issue with bfloat16 on Iridis
     )
 
     print("Preparing the trainer")
@@ -129,7 +129,6 @@ def main(model, dataset, subset, output_dir, num_epochs):
         per_device_eval_batch_size=16,
         num_train_epochs=num_epochs,
         weight_decay=0.01,
-        bf16=False,  # Not supported on CUDA
     )
 
     trainer = get_trainer(model, dataset, training_args, subset=subset)
