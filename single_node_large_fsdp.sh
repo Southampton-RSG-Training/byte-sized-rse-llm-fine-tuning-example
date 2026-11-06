@@ -1,12 +1,13 @@
 #!/bin/bash
 
 #SBATCH --job-name=fsdp-single-node-llm-example
-#SBATCH --partition=l4
-#SBATCH --time=00:10:00
+#SBATCH --partition=a100
+#SBATCH --time=00:30:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-task=2
 #SBATCH --cpus-per-task=2
+#SBATCH --mem-per-cpu=76000M
 
 WORKING_DIRECTORY=$SLURM_SUBMIT_DIR
 VENV_NAME=$WORKING_DIRECTORY/venv
@@ -38,7 +39,7 @@ echo "Head node IP: $head_node_ip"
 cd $SLURM_SUBMIT_DIR
 
 # Run the Python script
-accelerate launch --use-fsdp --num_processes 2 --num_machines 1 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2 --model=../hpc-shared-data/microsoft-ai/WizardLM-2-8x22B/
+accelerate launch --use-fsdp --fsdp_auto_wrap_policy=SIZE_BASED_WRAP --num_processes 2 --num_machines 1 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2 --model=Qwen/Qwen3-8B
 
 # deactivate virtual environment
 deactivate

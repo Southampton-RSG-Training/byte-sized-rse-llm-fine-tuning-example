@@ -31,14 +31,11 @@ source $VENV_NAME/bin/activate
 # Set any environment variables or configuration options
 export PYTHONUNBUFFERED=1
 
-head_node_ip=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)
-echo "Head node IP: $head_node_ip"
-
 # Move to job directory
 cd $SLURM_SUBMIT_DIR
 
 # Run the Python script
-accelerate launch --multi-gpu --num_processes 4 --num_machines 2 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
+srun python run_multinode.py
 
 # deactivate virtual environment
 deactivate

@@ -5,8 +5,8 @@
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --gpus-per-task=4
-#SBATCH --cpus-per-task=4
+#SBATCH --gpus-per-task=2
+#SBATCH --cpus-per-task=2
 
 WORKING_DIRECTORY=$SLURM_SUBMIT_DIR
 VENV_NAME=$WORKING_DIRECTORY/venv

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=fsdp-single-node-llm-example
-#SBATCH --partition=l4
+#SBATCH --partition=l40
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -38,7 +38,7 @@ echo "Head node IP: $head_node_ip"
 cd $SLURM_SUBMIT_DIR
 
 # Run the Python script
-accelerate launch --use-fsdp --num_processes 4 --num_machines 1 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
+accelerate launch --use-fsdp --fsdp_auto_wrap_policy=SIZE_BASED_WRAP--num_processes 4 --num_machines 1 --main_process_ip $head_node_ip --main_process_port 29500 llm_fine_tuning.py --num-epochs=2
 
 # deactivate virtual environment
 deactivate
