@@ -35,7 +35,7 @@ from transformers import (
 
 DEFAULT_MODEL = "HuggingFaceTB/SmolLM2-135M"
 DEFAULT_DATASET = "yelp/yelp_review_full"
-DEFAULT_CACHE = Path("/scratch") / getuser() / "hf_cache"
+DEFAULT_CACHE = Path("/scratch") / getuser()
 
 
 def prepare_dataset(
@@ -118,12 +118,12 @@ def get_trainer(model_path, dataset_path, training_args, subset):
 @click.option("--output-dir", default="fine_tuned_classifier", help="path to the output location")
 @click.option("--num-epochs", default=2, help="the number of epochs")
 @click.option("--subset", default=0.01, help="the proportion of the dataset to use")
-@click.option("--cache-dir", default=DEFAULT_CACHE, help="cache directory to use for weights")
+@click.option("--cache-dir", type=click.Path(file_okay=False, dir_okay=True), default=DEFAULT_CACHE, help="cache directory to use for weights")
 def main(model, dataset, subset, output_dir, num_epochs, cache_dir):
     print("Started")
 
     if cache_dir.exists() and cache_dir.is_dir():
-        os.environ["HF_HOME"] = os.fspath(cache_dir)
+        os.environ["HF_HOME"] = os.fspath(cache_dir / "hf_cache")
 
     accelerator = Accelerator()
     print(f"Device: {accelerator.device}")
