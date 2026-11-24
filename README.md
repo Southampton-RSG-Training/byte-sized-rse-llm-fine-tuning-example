@@ -27,6 +27,10 @@ For the large FSDP example, you will need to download Qwen3 weights as well:
 python llm_download.py --model Qwen/Qwen3-8B
 ```
 
+## WARNING
+
+Ensure that you do not have any Accelerate configuration files active when you run these jobs, as they may interfere with command-line arguments.
+
 ## Running
 
 You can verify that the code works correctly by running a couple of epochs on the login node with:
@@ -35,7 +39,7 @@ You can verify that the code works correctly by running a couple of epochs on th
 python llm_fine_tuning.py
 ```
 
-Assuming this works, you can run the code using sbatch.  There are 4 example scripts:
+Assuming this works, you can run the code using `sbatch`.  There are 4 example scripts:
 
 - `single_node_l4.sh` - basic data parallel fine-tuning on a single `l4` node with two GPUs
 - `single_node_fsdp.sh` - fully-sharded data parallel fine-tuning on a single `l40` node with two GPUs
