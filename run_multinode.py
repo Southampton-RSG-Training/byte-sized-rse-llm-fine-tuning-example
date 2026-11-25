@@ -18,6 +18,7 @@ Note: This may be better written as a bash script.
 import os
 import subprocess
 import socket
+import sys
 
 
 nodelist = os.environ.get(
@@ -59,9 +60,7 @@ proc = subprocess.Popen(
         "--machine_rank",
         proc_id,
         "llm_fine_tuning.py",
-        "--num-epochs",
-        "2",
-    ],
+    ] + sys.argv[1:],
     stdout=subprocess.PIPE,
     text=True,
     bufsize=1,
