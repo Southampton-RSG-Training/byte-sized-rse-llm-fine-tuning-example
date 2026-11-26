@@ -39,6 +39,7 @@ def get_llm(repo_name, trust_remote=False, auto_model=AutoModelForCausalLM):
         repo_name,
         trust_remote_code=trust_remote,
     )
+    print(model)
     return tokenizer, model
 
 

@@ -78,7 +78,7 @@ def prepare_dataset(
     return tokenized_dataset
 
 
-def get_trainer(model_path, dataset_path, training_args, subset):
+def get_trainer(accelerator, model_path, dataset_path, training_args, subset):
     """Prepare the model, dataset and build the trainer."""
 
     print("Loading the tokenizer weights")
@@ -97,6 +97,7 @@ def get_trainer(model_path, dataset_path, training_args, subset):
         local_files_only=True,
         dtype="auto",
     )
+    print(model)
 
     print("Preparing the trainer")
 
@@ -129,6 +130,7 @@ def main(model, dataset, subset, output_dir, num_epochs, cache_dir):
     print(f"Device: {accelerator.device}")
 
     training_args = TrainingArguments(
+        optim="adafactor",
         output_dir=output_dir,
         learning_rate=2e-5,
         per_device_train_batch_size=8,
@@ -137,7 +139,7 @@ def main(model, dataset, subset, output_dir, num_epochs, cache_dir):
         weight_decay=0.01,
     )
 
-    trainer = get_trainer(model, dataset, training_args, subset=subset)
+    trainer = get_trainer(accelerator, model, dataset, training_args, subset=subset)
     trainer.train()
 
 
