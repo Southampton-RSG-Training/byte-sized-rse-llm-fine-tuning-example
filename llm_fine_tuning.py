@@ -97,7 +97,11 @@ def get_trainer(accelerator, model_path, dataset_path, training_args, subset):
         local_files_only=True,
         dtype="auto",
     )
+    for p in model.base_model.parameters():
+        p.requires_grad = False
     print(model)
+    total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print("Trainable parameters:", total_params)
 
     print("Preparing the trainer")
 
