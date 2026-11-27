@@ -78,7 +78,7 @@ def prepare_dataset(
     return tokenized_dataset
 
 
-def get_trainer(accelerator, model_path, dataset_path, training_args, subset):
+def get_trainer(model_path, dataset_path, training_args, subset, full_model):
     """Prepare the model, dataset and build the trainer."""
 
     print("Loading the tokenizer weights")
@@ -97,8 +97,9 @@ def get_trainer(accelerator, model_path, dataset_path, training_args, subset):
         local_files_only=True,
         dtype="auto",
     )
-    for p in model.base_model.parameters():
-        p.requires_grad = False
+    if not full_model:
+        for p in model.base_model.parameters():
+            p.requires_grad = False
     print(model)
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print("Trainable parameters:", total_params)
@@ -124,7 +125,9 @@ def get_trainer(accelerator, model_path, dataset_path, training_args, subset):
 @click.option("--num-epochs", default=2, help="the number of epochs")
 @click.option("--subset", default=0.01, help="the proportion of the dataset to use")
 @click.option("--cache-dir", type=click.Path(file_okay=False, dir_okay=True), default=DEFAULT_CACHE, help="cache directory to use for weights")
-def main(model, dataset, subset, output_dir, num_epochs, cache_dir):
+@click.option("--full-model", default=False, help="whether to train classifier or all weights")
+@click.option("--optim", default='adafactor', help="the optimizer to use")
+def main(model, dataset, subset, output_dir, num_epochs, cache_dir, full_model, optim):
     print("Started")
 
     if cache_dir.exists() and cache_dir.is_dir():
@@ -134,7 +137,7 @@ def main(model, dataset, subset, output_dir, num_epochs, cache_dir):
     print(f"Device: {accelerator.device}")
 
     training_args = TrainingArguments(
-        optim="adafactor",
+        optim=optim,
         output_dir=output_dir,
         learning_rate=2e-5,
         per_device_train_batch_size=8,
@@ -143,7 +146,7 @@ def main(model, dataset, subset, output_dir, num_epochs, cache_dir):
         weight_decay=0.01,
     )
 
-    trainer = get_trainer(accelerator, model, dataset, training_args, subset=subset)
+    trainer = get_trainer(model, dataset, training_args, subset=subset, full_model=full_model)
     trainer.train()
 
 
